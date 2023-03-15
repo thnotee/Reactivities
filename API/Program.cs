@@ -1,3 +1,4 @@
+using API.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -5,21 +6,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<DataContext>(opt => 
-{
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-builder.Services.AddCors(opt =>{
+/*
+ this IServiceCollection services
+ 확장 메서드이기 때문에 
+ 확장 메서드란? 기존에 클래스나 인터페이스에 새로운 메서드를 추가하는 것
+this IServiceCollection services가 매개 변수로 사용되면, 
+이 인스턴스는 확장 메서드가 실행될 때 메서드의 첫 번째 매개 변수로 전달됩니다. 
+이를 통해, 확장 메서드 내에서 해당 인스턴스를 사용할 수 있게 됩니다.
 
-    opt.AddPolicy("CorsPolicy",policy =>
-    {
-        policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
-    });
-});
+즉 this IServiceCollection services는 IServiceCollection 
+인터페이스를 구현하는 객체를 받아와 추가로 구현한다
+*/
+builder.Services.AddControllers();
+builder.Services.AddApplicationServices(builder.Configuration);
+
+
 
 var app = builder.Build();
 
